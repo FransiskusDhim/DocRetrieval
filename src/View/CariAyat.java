@@ -6,9 +6,14 @@
 package View;
 
 import Model.Document;
+import Model.InvertedIndex;
 import Model.Posting;
+import static View.Home.index;
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
+
 
 /**
  *
@@ -18,8 +23,15 @@ public class CariAyat extends javax.swing.JFrame {
 
 
     public CariAyat() {
-        initComponents();
+        initComponents(); index = new InvertedIndex();
+        index.readDirectory(new File("Ayat Ks"));
+        TabelSearch.setAutoResizeMode(TabelSearch.AUTO_RESIZE_OFF);
+        TableColumn col = TabelSearch.getColumnModel().getColumn(0);
+        col.setPreferredWidth(50);
+        col = TabelSearch.getColumnModel().getColumn(2);
+        col.setPreferredWidth(2000);
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,66 +50,69 @@ public class CariAyat extends javax.swing.JFrame {
         CloseButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         TabelSearch.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID Dokumen", "Judul"
+                "ID", "Judul", "Isi Dokumen", "Prosentase"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -106,8 +121,10 @@ public class CariAyat extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(TabelSearch);
 
+        jLabel1.setFont(new java.awt.Font("Charlemagne Std", 0, 11)); // NOI18N
         jLabel1.setText("Query : ");
 
+        SearchButton.setFont(new java.awt.Font("Charlemagne Std", 0, 11)); // NOI18N
         SearchButton.setText("Search");
         SearchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,7 +149,7 @@ public class CariAyat extends javax.swing.JFrame {
                         .addGap(13, 13, 13)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(SearchQuery, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addComponent(SearchQuery, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(SearchButton))
                     .addGroup(layout.createSequentialGroup()
@@ -163,9 +180,11 @@ public class CariAyat extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchButtonActionPerformed
-        for (int i = 0; i < TabelSearch.getRowCount(); i++) {
+       for (int i = 0; i < TabelSearch.getRowCount(); i++) {
             TabelSearch.setValueAt("", i, 0);
             TabelSearch.setValueAt("", i, 1);
+            TabelSearch.setValueAt("", i, 2);
+            TabelSearch.setValueAt("", i, 3);
         }
         Home.index.makeDictionaryWithTermNumber();
         String query = SearchQuery.getText();
@@ -179,6 +198,8 @@ public class CariAyat extends javax.swing.JFrame {
             if (Home.getIndex().getCosineSimilarity(queryPostingList, PostingDokumen) > 0) {
                 TabelSearch.setValueAt(listDocs.get(i).getId(), x, 0);
                 TabelSearch.setValueAt(listDocs.get(i).getNamaDokumen(), x, 1);
+                TabelSearch.setValueAt(listDocs.get(i).getRealContent(), x, 2);
+                TabelSearch.setValueAt(listDocs.get(i).getRealContent(), x, 3);
                 x++;
             }
         }

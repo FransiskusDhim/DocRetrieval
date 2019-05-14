@@ -14,13 +14,9 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.CharArraySet;
-import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.en.PorterStemFilter;
 import org.apache.lucene.analysis.id.IndonesianAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.util.Version;
 
@@ -33,6 +29,23 @@ public class Document implements Comparable<Document> {
     private String content;
     private String realContent;
     private String namaDokumen;
+public Document() {
+    }
+
+    public Document(int id) {
+        this.id = id;
+    }
+
+    public Document(String content) {
+        this.content = content;
+        this.realContent = content;
+    }
+
+    public Document(int id, String content) {
+        this.id = id;
+        this.content = content;
+        this.realContent = content;
+    }
 
     public String getNamaDokumen() {
         return namaDokumen;
@@ -50,23 +63,15 @@ public class Document implements Comparable<Document> {
         this.realContent = realContent;
     }
 
-    public Document() {
-    }
 
-    public Document(int id) {
-        this.id = id;
-    }
-
-    public Document(String content) {
-        this.content = content;
-        this.realContent = content;
-    }
-
-    public Document(int id, String content) {
+    public Document(int id, String content, String realContent, String namaDokumen) {
         this.id = id;
         this.content = content;
-        this.realContent = content;
+        this.realContent = realContent;
+        this.namaDokumen = namaDokumen;
     }
+
+
 
     @Override
     public String toString() {
@@ -151,6 +156,7 @@ public class Document implements Comparable<Document> {
 
             while((line = bufferedReader.readLine()) != null) {
                 this.setContent(line);
+                this.setRealContent(line);
             }   
 
             bufferedReader.close();         
